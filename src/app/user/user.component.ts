@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { UserService } from '/home/zack/Documents/my-crud/src/app/user.service';
+
+import { User } from '/home/zack/Documents/my-crud/src/app/user';
 
 @Component({
   selector: 'user',
@@ -6,46 +9,28 @@ import { Component } from '@angular/core';
   styleUrls: ['./user.component.css']
 })
 
-export class UserComponent {
+export class UserComponent implements OnInit {
 
   title: string;
-  user: user;
-  users=[];
+  active = true;
 
-  constructor() {
-    this.title = 'My CRUD';
+  constructor(private _exampleService: UserService) {
 
   }
 
-  addUser(){
-    let x = (<HTMLInputElement>document.getElementById("name")).value;
-    let y = (<HTMLInputElement>document.getElementById("age")).value;
-
-    if(x == '' || y == '') {
-      alert("You must enter a value in both fields!");
-      return false;
-    }
-
-    this.user = {
-      name: x,
-      age: parseInt(y)
-    }
-    
-    console.log(this.user.name + " has been added!");
-    this.users.push(this.user);
-
-    (<HTMLInputElement>document.getElementById("name")).value = '';
-    (<HTMLInputElement>document.getElementById("age")).value = '';
+  addUser(name: string, age: number){
+    let myUser = new User(name, age);
+    this._exampleService.users.push(myUser);
+    this.active = false;
+    setTimeout(()=> this.active=true, 0);
   }
 
   deleteUser(i) {
-    this.users.splice(i,1);
-
+    this._exampleService.users.splice(i,1);
   }
 
-}
+  ngOnInit(){
+    this.title = this._exampleService.hello();
+  }
 
-interface user {
-  name: string;
-  age: number;
 }
