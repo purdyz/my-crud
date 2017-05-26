@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
+import { Http, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 
 export class UserService {
 
-  users = [
-    {name: "Zack", age: 26},
-    {name: "Erika", age: 27},
-    {name: "Adam", age: 28}
-  ];
+  constructor(private _http: Http) {}
 
-  constructor() {
-
+  getUsers(): Observable<Array<any>> {
+    return this._http
+      .get('/assets/users.json')
+      .map((response: Response) => response.json());
   }
 
   hello(){
