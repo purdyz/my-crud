@@ -11,11 +11,26 @@ import { User } from '/home/zack/Documents/my-crud/src/app/user';
 
 export class UserComponent implements OnInit {
 
+  users: User[];
   title: string;
   active = true;
+  errorMessage: string;
 
   constructor(private _exampleService: UserService) {
 
+  }
+
+  ngOnInit(){
+    this.title = this._exampleService.hello();
+    this.getUsers();
+  }
+
+  getUsers(){
+    this._exampleService.getUsers()
+      .subscribe(
+        users => this.users = users,
+        error => this.errorMessage = <any>error
+      );
   }
 
   addUser(name: string, age: number){
@@ -27,10 +42,6 @@ export class UserComponent implements OnInit {
 
   deleteUser(i) {
     this._exampleService.users.splice(i,1);
-  }
-
-  ngOnInit(){
-    this.title = this._exampleService.hello();
   }
 
 }
